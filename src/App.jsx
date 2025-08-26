@@ -98,7 +98,7 @@ const headerPlacement = {
 // Map each checkbox id to a coordinate on the template where the box should be marked
 const checkboxPlacement = {
   // Visual items
-  V1:     { page: 1, x: 43, y: 171 },
+  V1:     { page: 0, x: 43, y: 171 },
   "V1-a": { page: 0, x: 80, y: 582 },
   "V1-b": { page: 0, x: 80, y: 564 },
   "V1-c": { page: 0, x: 80, y: 546 },
