@@ -17,61 +17,67 @@ const range = (start, end, step = 1) => {
 // Visual inspection: 21 top-level items.
 // Items 1 and 3 have 4 sub-items each.
 const visualItems = [
-  { id: "V1", label: "Item 1", children: [
-    { id: "V1-a", label: "Sub-item 1" },
-    { id: "V1-b", label: "Sub-item 2" },
-    { id: "V1-c", label: "Sub-item 3" },
-    { id: "V1-d", label: "Sub-item 4" },
+  { id: "V1", label: "Propane", children: [
+    { id: "V1-a", label: "Relief Valve" },
+    { id: "V1-b", label: "Fuel Level" },
+    { id: "V1-c", label: "No Leaks" },
+    { id: "V1-d", label: "Safety Straps" },
   ] },
-  { id: "V2", label: "Item 2" },
-  { id: "V3", label: "Item 3", children: [
-    { id: "V3-a", label: "Sub-item 1" },
-    { id: "V3-b", label: "Sub-item 2" },
-    { id: "V3-c", label: "Sub-item 3" },
-    { id: "V3-d", label: "Sub-item 4" },
+  { id: "V2", label: "Rear Tire (Left)" },
+  { id: "V3", label: "Engine Compartment", children: [
+    { id: "V3-a", label: "Oil" },
+    { id: "V3-b", label: "Battery" },
+    { id: "V3-c", label: "Radiator" },
+    { id: "V3-d", label: "Air Filter" },
+    { id: "V3-e", label: "Fan Belt" },
   ] },
-  { id: "V4", label: "Item 4" },
-  { id: "V5", label: "Item 5" },
-  { id: "V6", label: "Item 6" },
-  { id: "V7", label: "Item 7" },
-  { id: "V8", label: "Item 8" },
-  { id: "V9", label: "Item 9" },
-  { id: "V10", label: "Item 10" },
-  { id: "V11", label: "Item 11" },
-  { id: "V12", label: "Item 12" },
-  { id: "V13", label: "Item 13" },
-  { id: "V14", label: "Item 14" },
-  { id: "V15", label: "Item 15" },
-  { id: "V16", label: "Item 16" },
-  { id: "V17", label: "Item 17" },
-  { id: "V18", label: "Item 18" },
-  { id: "V19", label: "Item 19" },
-  { id: "V20", label: "Item 20" },
-  { id: "V21", label: "Item 21" },
+  { id: "V4", label: "Overhead Guard" },
+  { id: "V5", label: "Front Tire (Left)" },
+  { id: "V6", label: "Tilt Cylinder" },
+  { id: "V7", label: "Carriage" },
+  { id: "V8", label: "Fork Locking Pin (Left)" },
+  { id: "V9", label: "Fork (Left)", children: [
+    { id: "V9-a", label: "Attachment Appliccable" },
+  ] },
+  { id: "V10", label: "Mast" },
+  { id: "V11", label: "Lift Cylinder", children: [
+    { id: "V11-a", label: "Lift Chains" },
+  ] },
+  { id: "V12", label: "Fork (Right)", children: [
+    { id: "V12-a", label: "Attachment Appliccable" },
+  ] },
+  { id: "V13", label: "Fork Locking Pin (Right)" },
+  { id: "V14", label: "Carriage" },
+  { id: "V15", label: "Tilt Cylinder" },
+  { id: "V16", label: "Front Tire (Right)" },
+  { id: "V17", label: "Hydraulic Oil" },
+  { id: "V18", label: "Data Plate" },
+  { id: "V19", label: "Seat & Seat Belt" },
+  { id: "V20", label: "Operator Manual" },
+  { id: "V21", label: "Rear Tire (Right)" },
 ];
 
 // Operational inspection: A-J (10 items). E and F have 4 sub-items each
 const operationalItems = [
-  { id: "O-A", label: "A" },
-  { id: "O-B", label: "B" },
-  { id: "O-C", label: "C" },
-  { id: "O-D", label: "D" },
-  { id: "O-E", label: "E", children: [
-    { id: "O-E-1", label: "E-1" },
-    { id: "O-E-2", label: "E-2" },
-    { id: "O-E-3", label: "E-3" },
-    { id: "O-E-4", label: "E-4" },
+  { id: "O-A", label: "A - Listen for unusal Noise" },
+  { id: "O-B", label: "B - Check Service & Parking Brake" },
+  { id: "O-C", label: "C - Lifting Control" },
+  { id: "O-D", label: "D - Tilt Control" },
+  { id: "O-E", label: "E - Forward Driving", children: [
+    { id: "O-E-1", label: "Accelerator" },
+    { id: "O-E-2", label: "Steering" },
+    { id: "O-E-3", label: "Braking" },
   ] },
-  { id: "O-F", label: "F", children: [
-    { id: "O-F-1", label: "F-1" },
-    { id: "O-F-2", label: "F-2" },
-    { id: "O-F-3", label: "F-3" },
-    { id: "O-F-4", label: "F-4" },
+  { id: "O-F", label: "F - Reverse Driving", children: [
+    { id: "O-F-1", label: "Accelerators" },
+    { id: "O-F-2", label: "Steering" },
+    { id: "O-F-3", label: "Braking" },
+    { id: "O-F-4", label: "Backup Alarm" },
   ] },
-  { id: "O-G", label: "G" },
-  { id: "O-H", label: "H" },
-  { id: "O-I", label: "I" },
-  { id: "O-J", label: "J" },
+  { id: "O-G", label: "G - Lights" },
+  { id: "O-H", label: "H - Horn" },
+  { id: "O-I", label: "I - Gauges" },
+  { id: "O-J", label: "J - Oil Spot on Floor" },
 ];
 
 // -----------------------------
@@ -92,18 +98,68 @@ const headerPlacement = {
 // Map each checkbox id to a coordinate on the template where the box should be marked
 const checkboxPlacement = {
   // Visual items
-  V1: { page: 0, x: 60, y: 600 },
+  V1:     { page: 1, x: 43, y: 171 },
   "V1-a": { page: 0, x: 80, y: 582 },
   "V1-b": { page: 0, x: 80, y: 564 },
   "V1-c": { page: 0, x: 80, y: 546 },
   "V1-d": { page: 0, x: 80, y: 528 },
-  V2: { page: 0, x: 60, y: 510 },
-  V3: { page: 0, x: 60, y: 492 },
+
+  V2:     { page: 0, x: 60, y: 510 },
+
+  V3:     { page: 0, x: 60, y: 492 },
   "V3-a": { page: 0, x: 80, y: 474 },
   "V3-b": { page: 0, x: 80, y: 456 },
   "V3-c": { page: 0, x: 80, y: 438 },
   "V3-d": { page: 0, x: 80, y: 420 },
-  // ...add coordinates for the rest of V4..V21 and O-*
+  "V3-e": { page: 0, x: 80, y: 402 },
+
+  V4:  { page: 0, x: 60, y: 384 },
+  V5:  { page: 0, x: 60, y: 366 },
+  V6:  { page: 0, x: 60, y: 348 },
+  V7:  { page: 0, x: 60, y: 330 },
+  V8:  { page: 0, x: 60, y: 312 },
+
+  V9:     { page: 0, x: 60, y: 294 },
+  "V9-a": { page: 0, x: 80, y: 276 },
+
+  V10: { page: 0, x: 60, y: 258 },
+
+  V11:     { page: 0, x: 60, y: 240 },
+  "V11-a": { page: 0, x: 80, y: 222 },
+
+  V12:     { page: 0, x: 60, y: 204 },
+  "V12-a": { page: 0, x: 80, y: 186 },
+
+  V13: { page: 0, x: 60, y: 168 },
+  V14: { page: 0, x: 60, y: 150 },
+  V15: { page: 0, x: 60, y: 132 },
+  V16: { page: 0, x: 60, y: 114 },
+  V17: { page: 0, x: 60, y: 96 },
+  V18: { page: 0, x: 60, y: 78 },
+  V19: { page: 0, x: 60, y: 60 },
+  V20: { page: 0, x: 60, y: 42 },
+  V21: { page: 0, x: 60, y: 24 },
+
+  "O-A":   { page: 1, x: 60, y: 600 },
+  "O-B":   { page: 1, x: 60, y: 582 },
+  "O-C":   { page: 1, x: 60, y: 564 },
+  "O-D":   { page: 1, x: 60, y: 546 },
+
+  "O-E":   { page: 1, x: 60, y: 528 },
+  "O-E-1": { page: 1, x: 80, y: 510 },
+  "O-E-2": { page: 1, x: 80, y: 492 },
+  "O-E-3": { page: 1, x: 80, y: 474 },
+
+  "O-F":   { page: 1, x: 60, y: 456 },
+  "O-F-1": { page: 1, x: 80, y: 438 },
+  "O-F-2": { page: 1, x: 80, y: 420 },
+  "O-F-3": { page: 1, x: 80, y: 402 },
+  "O-F-4": { page: 1, x: 80, y: 384 },
+
+  "O-G":   { page: 1, x: 60, y: 366 },
+  "O-H":   { page: 1, x: 60, y: 348 },
+  "O-I":   { page: 1, x: 60, y: 330 },
+  "O-J":   { page: 1, x: 60, y: 312 },
 };
 
 // -----------------------------
