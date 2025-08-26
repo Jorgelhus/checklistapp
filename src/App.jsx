@@ -99,7 +99,7 @@ const headerPlacement = {
 const checkboxPlacement = {
   // Visual items
   V1:     { page: 0, x: 43, y: 171 },
-  "V1-a": { page: 0, x: 80, y: 582 },
+  "V1-a": { page: 0, x: 43, y: 250 },
   "V1-b": { page: 0, x: 80, y: 564 },
   "V1-c": { page: 0, x: 80, y: 546 },
   "V1-d": { page: 0, x: 80, y: 528 },
