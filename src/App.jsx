@@ -87,79 +87,79 @@ const operationalItems = [
 // Coordinates are in PDF user space (origin at bottom-left). Units are points.
 // Leave entries undefined to skip.
 const headerPlacement = {
-  date: { page: 0, x: 100, y: 700 }, // TODO: set exact x,y
-  truck: { page: 0, x: 100, y: 680 },
-  operator: { page: 0, x: 100, y: 660 },
-  startHour: { page: 0, x: 400, y: 700 },
-  endHour: { page: 0, x: 400, y: 680 },
-  fuel: { page: 0, x: 400, y: 660 },
+  date: { page: 0, x: 50, y: 535 }, // TODO: set exact x,y
+  truck: { page: 0, x: 170, y: 535 },
+  operator: { page: 0, x: 283, y: 535 },
+  startHour: { page: 0, x: 73, y: 516 },
+  endHour: { page: 0, x: 176, y: 516 },
+  fuel: { page: 0, x: 283, y: 516 },
 };
 
 // Map each checkbox id to a coordinate on the template where the box should be marked
 const checkboxPlacement = {
   // Visual items
-  V1:     { page: 0, x: 43, y: 171 },
-  "V1-a": { page: 0, x: 43, y: 250 },
-  "V1-b": { page: 0, x: 80, y: 564 },
-  "V1-c": { page: 0, x: 80, y: 546 },
-  "V1-d": { page: 0, x: 80, y: 528 },
+  V1:     { page: 0, x: 39, y: 436 },
+  "V1-a": { page: 0, x: 59, y: 426 },
+  "V1-b": { page: 0, x: 59, y: 415 },
+  "V1-c": { page: 0, x: 59, y: 405 },
+  "V1-d": { page: 0, x: 59, y: 395 },
 
-  V2:     { page: 0, x: 60, y: 510 },
+  V2:     { page: 0, x: 39, y: 385 },
 
-  V3:     { page: 0, x: 60, y: 492 },
-  "V3-a": { page: 0, x: 80, y: 474 },
-  "V3-b": { page: 0, x: 80, y: 456 },
-  "V3-c": { page: 0, x: 80, y: 438 },
-  "V3-d": { page: 0, x: 80, y: 420 },
-  "V3-e": { page: 0, x: 80, y: 402 },
+  V3:     { page: 0, x: 39, y: 375 },
+  "V3-a": { page: 0, x: 59, y: 365 },
+  "V3-b": { page: 0, x: 59, y: 355 },
+  "V3-c": { page: 0, x: 59, y: 345 },
+  "V3-d": { page: 0, x: 59, y: 335 },
+  "V3-e": { page: 0, x: 59, y: 325 },
 
-  V4:  { page: 0, x: 60, y: 384 },
-  V5:  { page: 0, x: 60, y: 366 },
-  V6:  { page: 0, x: 60, y: 348 },
-  V7:  { page: 0, x: 60, y: 330 },
-  V8:  { page: 0, x: 60, y: 312 },
+  V4:  { page: 0, x: 39, y: 315 },
+  V5:  { page: 0, x: 39, y: 305 },
+  V6:  { page: 0, x: 39, y: 295 },
+  V7:  { page: 0, x: 39, y: 285 },
+  V8:  { page: 0, x: 39, y: 275 },
 
-  V9:     { page: 0, x: 60, y: 294 },
-  "V9-a": { page: 0, x: 80, y: 276 },
+  V9:     { page: 0, x: 39, y: 265 },
+  "V9-a": { page: 0, x: 39, y: 255 },
 
-  V10: { page: 0, x: 60, y: 258 },
+  V10: { page: 0, x: 39, y: 245 },
 
-  V11:     { page: 0, x: 60, y: 240 },
-  "V11-a": { page: 0, x: 80, y: 222 },
+  V11:     { page: 0, x: 39, y: 235 },
+  "V11-a": { page: 0, x: 39, y: 225 },
 
-  V12:     { page: 0, x: 60, y: 204 },
-  "V12-a": { page: 0, x: 80, y: 186 },
+  V12:     { page: 0, x: 39, y: 215 },
+  "V12-a": { page: 0, x: 39, y: 205 },
 
-  V13: { page: 0, x: 60, y: 168 },
-  V14: { page: 0, x: 60, y: 150 },
-  V15: { page: 0, x: 60, y: 132 },
-  V16: { page: 0, x: 60, y: 114 },
-  V17: { page: 0, x: 60, y: 96 },
-  V18: { page: 0, x: 60, y: 78 },
-  V19: { page: 0, x: 60, y: 60 },
-  V20: { page: 0, x: 60, y: 42 },
-  V21: { page: 0, x: 60, y: 24 },
+  V13: { page: 0, x: 39, y: 195 },
+  V14: { page: 0, x: 39, y: 185 },
+  V15: { page: 0, x: 39, y: 175 },
+  V16: { page: 0, x: 39, y: 165 },
+  V17: { page: 0, x: 39, y: 155 },
+  V18: { page: 0, x: 39, y: 145 },
+  V19: { page: 0, x: 39, y: 135 },
+  V20: { page: 0, x: 39, y: 125 },
+  V21: { page: 0, x: 39, y: 115 },
 
-  "O-A":   { page: 1, x: 60, y: 600 },
-  "O-B":   { page: 1, x: 60, y: 582 },
-  "O-C":   { page: 1, x: 60, y: 564 },
-  "O-D":   { page: 1, x: 60, y: 546 },
+  "O-A":   { page: 0, x: 223, y: 435 },
+  "O-B":   { page: 0, x: 223, y: 425 },
+  "O-C":   { page: 0, x: 223, y: 415 },
+  "O-D":   { page: 0, x: 223, y: 405 },
 
-  "O-E":   { page: 1, x: 60, y: 528 },
-  "O-E-1": { page: 1, x: 80, y: 510 },
-  "O-E-2": { page: 1, x: 80, y: 492 },
-  "O-E-3": { page: 1, x: 80, y: 474 },
+  "O-E":   { page: 0, x: 223, y: 395 },
+  "O-E-1": { page: 0, x: 241, y: 385 },
+  "O-E-2": { page: 0, x: 241, y: 375 },
+  "O-E-3": { page: 0, x: 241, y: 365 },
 
-  "O-F":   { page: 1, x: 60, y: 456 },
-  "O-F-1": { page: 1, x: 80, y: 438 },
-  "O-F-2": { page: 1, x: 80, y: 420 },
-  "O-F-3": { page: 1, x: 80, y: 402 },
-  "O-F-4": { page: 1, x: 80, y: 384 },
+  "O-F":   { page: 0, x: 223, y: 355 },
+  "O-F-1": { page: 0, x: 241, y: 345 },
+  "O-F-2": { page: 0, x: 241, y: 335 },
+  "O-F-3": { page: 0, x: 241, y: 325 },
+  "O-F-4": { page: 0, x: 241, y: 315 },
 
-  "O-G":   { page: 1, x: 60, y: 366 },
-  "O-H":   { page: 1, x: 60, y: 348 },
-  "O-I":   { page: 1, x: 60, y: 330 },
-  "O-J":   { page: 1, x: 60, y: 312 },
+  "O-G":   { page: 0, x: 223, y: 305 },
+  "O-H":   { page: 0, x: 223, y: 295 },
+  "O-I":   { page: 0, x: 223, y: 285 },
+  "O-J":   { page: 0, x: 223, y: 275 },
 };
 
 // -----------------------------
@@ -218,7 +218,7 @@ function CheckboxRow({ id, label, state, setState }) {
             }))
           }
         />
-        <span className="text-gray-900 font-medium select-none">{label}</span>
+        <span className="text-gray-900 font-small select-none">{label}</span>
       </label>
 
       <AnimatePresence initial={false}>
