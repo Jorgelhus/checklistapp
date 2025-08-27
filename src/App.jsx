@@ -8,14 +8,8 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 // -----------------------------
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
-const range = (start, end, step = 1) => {
-  const out = [];
-  for (let i = start; i <= end; i += step) out.push(i);
-  return out;
-};
-
 // Visual inspection: 21 top-level items.
-// Items 1 and 3 have 4 sub-items each.
+// Items 1 and 3 have sub-items.
 const visualItems = [
   { id: "V1", label: "Propane", children: [
     { id: "V1-a", label: "Relief Valve" },
@@ -57,7 +51,7 @@ const visualItems = [
   { id: "V21", label: "Rear Tire (Right)" },
 ];
 
-// Operational inspection: A-J (10 items). E and F have 4 sub-items each
+// Operational inspection: A-J (10 items). E and F have sub-items
 const operationalItems = [
   { id: "O-A", label: "A - Listen for unusal Noise" },
   { id: "O-B", label: "B - Check Service & Parking Brake" },
@@ -80,14 +74,17 @@ const operationalItems = [
   { id: "O-J", label: "J - Oil Spot on Floor" },
 ];
 
+// Prepare flattened lists and label map
+const allItemsFlat = [...visualItems, ...operationalItems].flatMap((it) => [it, ...(it.children || [])]);
+const allItemIds = allItemsFlat.map((it) => it.id);
+const labelMap = allItemsFlat.reduce((acc, it) => { acc[it.id] = it.label; return acc; }, {});
+
 // -----------------------------
 // PDF coordinate mapping (EDIT THESE)
 // -----------------------------
-// You will add the precise coordinates for your template.pdf here.
 // Coordinates are in PDF user space (origin at bottom-left). Units are points.
-// Leave entries undefined to skip.
 const headerPlacement = {
-  date: { page: 0, x: 50, y: 535 }, // TODO: set exact x,y
+  date: { page: 0, x: 50, y: 535 },
   truck: { page: 0, x: 170, y: 535 },
   operator: { page: 0, x: 283, y: 535 },
   startHour: { page: 0, x: 73, y: 516 },
@@ -95,7 +92,7 @@ const headerPlacement = {
   fuel: { page: 0, x: 283, y: 516 },
 };
 
-// Map each checkbox id to a coordinate on the template where the box should be marked
+// Map each checkbox id to a coordinate on the template where the mark should be drawn
 const checkboxPlacement = {
   // Visual items
   V1:     { page: 0, x: 39, y: 436 },
@@ -218,7 +215,7 @@ function CheckboxRow({ id, label, state, setState }) {
             }))
           }
         />
-        <span className="text-gray-900 font-small select-none">{label}</span>
+        <span className="text-gray-900 text-sm select-none">{label}</span>
       </label>
 
       <AnimatePresence initial={false}>
@@ -299,13 +296,19 @@ async function generatePdf({
     page.drawText(String(text ?? ""), { x, y, size, font: helv, color: rgb(0, 0, 0) });
   };
 
-  const drawCheck = (pageIndex, x, y, size = 10) => {
+  // Vector marks to avoid emoji font issues
+  const drawMark = (pageIndex, x, y, size = 10, type = "ok") => {
     if (pageIndex == null || x == null || y == null) return;
     const page = pdfDoc.getPage(pageIndex);
-    // Draw an "X" inside a checkbox square
-    page.drawRectangle({ x: x - 2, y: y - 2, width: size + 4, height: size + 4, borderWidth: 0.5, color: rgb(1, 1, 1), borderColor: rgb(0,0,0) });
-    page.drawLine({ start: { x, y }, end: { x: x + size, y: y + size }, thickness: 1, color: rgb(0, 0, 0) });
-    page.drawLine({ start: { x, y: y + size }, end: { x: x + size, y }, thickness: 1, color: rgb(0, 0, 0) });
+    if (type === "ok") {
+      // Draw a check mark: two lines
+      page.drawLine({ start: { x: x, y: y + size * 0.4 }, end: { x: x + size * 0.35, y: y }, thickness: 1.2, color: rgb(0, 0, 0) });
+      page.drawLine({ start: { x: x + size * 0.35, y: y }, end: { x: x + size, y: y + size }, thickness: 1.2, color: rgb(0, 0, 0) });
+    } else {
+      // Draw an X
+      page.drawLine({ start: { x, y }, end: { x: x + size, y: y + size }, thickness: 1.2, color: rgb(0, 0, 0) });
+      page.drawLine({ start: { x, y: y + size }, end: { x: x + size, y }, thickness: 1.2, color: rgb(0, 0, 0) });
+    }
   };
 
   // 1) Header text placements
@@ -314,27 +317,36 @@ async function generatePdf({
   drawText(headerPlacement.operator?.page, header.operator, headerPlacement.operator?.x, headerPlacement.operator?.y);
   drawText(headerPlacement.startHour?.page, header.startHour, headerPlacement.startHour?.x, headerPlacement.startHour?.y);
   drawText(headerPlacement.endHour?.page, header.endHour, headerPlacement.endHour?.x, headerPlacement.endHour?.y);
-  drawText(headerPlacement.fuel?.page, `${header.fuel}%`, headerPlacement.fuel?.x, headerPlacement.fuel?.y);
+  drawText(headerPlacement.fuel?.page, header.fuel, headerPlacement.fuel?.x, headerPlacement.fuel?.y);
 
-  // 2) Checkboxes
-  Object.entries(checks).forEach(([id, { checked }]) => {
-    if (!checked) return;
+  // Build a complete set of checks so every item receives a mark
+  const allItemsFlatLocal = [...visualItems, ...operationalItems].flatMap((it) => [it, ...(it.children || [])]);
+  const allItemIdsLocal = allItemsFlatLocal.map((it) => it.id);
+  const resolvedChecks = Object.fromEntries(
+    allItemIdsLocal.map((id) => {
+      const v = checks[id] || {};
+      return [id, { checked: Boolean(v.checked), comment: v.comment || "" }];
+    })
+  );
+
+  // 2) Draw marks for ALL items: unchecked => OK (check), checked => ISSUE (X)
+  allItemIdsLocal.forEach((id) => {
     const pos = checkboxPlacement[id];
-    if (!pos) return; // not configured yet
-    drawCheck(pos.page ?? 0, pos.x, pos.y, 9);
+    if (!pos) return; // not configured
+    const isChecked = resolvedChecks[id].checked;
+    drawMark(pos.page ?? 0, pos.x, pos.y, 10, isChecked ? "issue" : "ok");
   });
 
   // 3) Comments page (only if at least one checked item has a comment)
-  const commented = Object.entries(checks)
+  const commented = Object.entries(resolvedChecks)
     .filter(([_, v]) => v.checked && v.comment && v.comment.trim().length > 0)
     .map(([id, v]) => ({ id, comment: v.comment.trim() }));
 
   if (commented.length > 0) {
-    const page = pdfDoc.addPage([595.28, 841.89]); // A4 portrait in points
+    const page = pdfDoc.addPage([595.28, 841.89]); // A4 portrait
     const title = "Comments";
     page.drawText(title, { x: 40, y: 800, size: 18, font: helv });
 
-    // simple text flow
     const maxWidth = 515; // page width - margins
     const lineHeight = 14;
     let cursorY = 770;
@@ -359,12 +371,11 @@ async function generatePdf({
     };
 
     commented.forEach(({ id, comment }, idx) => {
-      const header = `${idx + 1}. ${id}`;
-      page.drawText(header, { x: 40, y: cursorY, size: 12, font: helv });
+      const headerLine = `${idx + 1}. ${id}`;
+      page.drawText(headerLine, { x: 40, y: cursorY, size: 12, font: helv });
       cursorY -= lineHeight + 2;
       wrap(comment).forEach((ln) => {
         if (cursorY < 60) {
-          // add another page if needed
           const np = pdfDoc.addPage([595.28, 841.89]);
           cursorY = 800;
           np.drawText("Comments (cont.)", { x: 40, y: cursorY, size: 14, font: helv });
@@ -404,7 +415,7 @@ export default function App() {
     operator: "",
     startHour: "",
     endHour: "",
-    fuel: 100,
+    fuel: "Propane", // default to Propane (fuel type)
   });
 
   const [visualState, setVisualState] = useState({});
@@ -419,7 +430,8 @@ export default function App() {
   const goPrev = () => setStep((s) => Math.max(s - 1, 0));
 
   const onGenerate = async () => {
-    await generatePdf({ header, checks: { ...visualState, ...operationalState } });
+    const checks = { ...visualState, ...operationalState };
+    await generatePdf({ header, checks });
   };
 
   return (
@@ -481,14 +493,14 @@ export default function App() {
                       onChange={(e) => setHeader((h) => ({ ...h, endHour: e.target.value }))}
                     />
                   </Field>
-                  <Field label="Fuel">
+                  <Field label="Fuel (Type)">
                     <select
                       className="w-full rounded-xl border p-3"
                       value={header.fuel}
-                      onChange={(e) => setHeader((h) => ({ ...h, fuel: Number(e.target.value) }))}
+                      onChange={(e) => setHeader((h) => ({ ...h, fuel: e.target.value }))}
                     >
-                      {range(0, 100, 10).map((n) => (
-                        <option key={n} value={n}>{n}%</option>
+                      {['Propane','Diesel','Gasoline','Electric'].map((t) => (
+                        <option key={t} value={t}>{t}</option>
                       ))}
                     </select>
                   </Field>
@@ -549,25 +561,31 @@ export default function App() {
                       <div><span className="text-gray-500">Operator:</span> {header.operator}</div>
                       <div><span className="text-gray-500">Start:</span> {header.startHour}</div>
                       <div><span className="text-gray-500">End:</span> {header.endHour}</div>
-                      <div><span className="text-gray-500">Fuel:</span> {header.fuel}%</div>
+                      <div><span className="text-gray-500">Fuel:</span> {header.fuel}</div>
                     </div>
                   </div>
 
                   <div>
-                    <div className="font-semibold mb-1">Visual Inspection (checked)</div>
+                    <div className="font-semibold mb-1">Visual Inspection (issues only)</div>
                     <ul className="list-disc ml-5">
-                      {[...Object.entries(visualState)].filter(([_, v]) => v?.checked).map(([k, v]) => (
-                        <li key={k} className="mb-1">{k}{v?.comment ? ` — ${v.comment}` : ""}</li>
-                      ))}
+                      {allItemsFlat
+                        .filter((it) => it.id.startsWith('V'))
+                        .filter((it) => visualState[it.id]?.checked)
+                        .map((it) => (
+                          <li key={it.id} className="mb-1">{labelMap[it.id]}{visualState[it.id]?.comment ? ` — ${visualState[it.id].comment}` : ""}</li>
+                        ))}
                     </ul>
                   </div>
 
                   <div>
-                    <div className="font-semibold mb-1">Operational Inspection (checked)</div>
+                    <div className="font-semibold mb-1">Operational Inspection (issues only)</div>
                     <ul className="list-disc ml-5">
-                      {[...Object.entries(operationalState)].filter(([_, v]) => v?.checked).map(([k, v]) => (
-                        <li key={k} className="mb-1">{k}{v?.comment ? ` — ${v.comment}` : ""}</li>
-                      ))}
+                      {allItemsFlat
+                        .filter((it) => it.id.startsWith('O'))
+                        .filter((it) => operationalState[it.id]?.checked)
+                        .map((it) => (
+                          <li key={it.id} className="mb-1">{labelMap[it.id]}{operationalState[it.id]?.comment ? ` — ${operationalState[it.id].comment}` : ""}</li>
+                        ))}
                     </ul>
                   </div>
 
