@@ -479,7 +479,7 @@ export default function App() {
                   </Field>
                   <Field label="Start Hour">
                     <input
-                      type="time"
+                      type="text"
                       className="w-full rounded-xl border p-3"
                       value={header.startHour}
                       onChange={(e) => setHeader((h) => ({ ...h, startHour: e.target.value }))}
@@ -487,7 +487,7 @@ export default function App() {
                   </Field>
                   <Field label="End Hour">
                     <input
-                      type="time"
+                      type="text"
                       className="w-full rounded-xl border p-3"
                       value={header.endHour}
                       onChange={(e) => setHeader((h) => ({ ...h, endHour: e.target.value }))}
